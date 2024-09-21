@@ -1,11 +1,11 @@
 <template>
   <div class="q-pa-md" style="max-width: 400px">
     <q-form @submit="onSubmit">
-      <q-input v-model="first_name" label="First Name" />
-      <q-input v-model="last_name" label="Last Name" />
-      <q-input v-model="email" label="Email" />
-      <q-input v-model="address" label="Address" />
-      <q-input v-model="phone_number" label="Phone Number" />
+      <q-input v-model="name" label="Name" />
+      <q-input v-model="description" label="Description" />
+      <q-input v-model="price" label="Price" />
+      <q-input v-model="category" label="Category" />
+      <q-input v-model="image_url" label="image_url" />
       <q-btn label="Submit" type="Submit" color="primary" />
     </q-form>
   </div>
@@ -14,22 +14,22 @@
 <script setup>
 import { ref } from "vue";
 import router from '@/router';
-const first_name = ref('')
-const last_name = ref('')
-const email = ref('')
-const address = ref('')
-const phone_number = ref('')
+const name = ref('')
+const description = ref('')
+const price = ref('')
+const category = ref('')
+const image_url = ref('')
 
 const onSubmit = () => {
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
 
   const raw = JSON.stringify({
-    "first_name": first_name.value,
-    "last_name": last_name.value,
-    "email": email.value,
-    "address": address.value,
-    "phone_number": phone_number.value,
+    "name": name.value,
+    "description": description.value,
+    "price": price.value,
+    "category": category.value,
+    "image_url": image_url.value,
   });
 
   const requestOptions = {
@@ -39,13 +39,13 @@ const onSubmit = () => {
     redirect: "follow",
   };
 
-  fetch("http://localhost:8800/api/v1//customers", requestOptions)
+  fetch("http://localhost:8800/api/v1/products", requestOptions)
     .then((response) => response.json())
     .then((result) => {
         alert(result.message);
         console.log(result);
         if(result.status === "ok"){
-            router.push('/')
+            router.push('/product')
         }
     })
     .catch((error) => console.error(error));

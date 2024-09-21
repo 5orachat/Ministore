@@ -4,7 +4,7 @@
       <q-btn icon="add" @click="onCreate"/>
   </div>
     <q-table
-      title="MINISTORE"
+      title="CUSTOMER"
       :rows="rows"
       :columns="columns"
       row-key="name"
@@ -17,6 +17,7 @@
     </template>
     </q-table>
   </div>
+  
 </template>
 
 <script setup>
@@ -33,7 +34,6 @@ const columns = [
   { name: 'actions', align: 'center', label: 'id', field: 'id', sortable: true },
 ]
 
-
 const rows = ref([])
 
 const fetchData = () => {
@@ -46,12 +46,31 @@ const fetchData = () => {
 fetchData()
 
 const onEdit = (id) => {
-  alert('Edit: ' + id)
+  router.push('/update/'+ id)
 }
 
 const onDelete = (id) => {
-  alert('Delete: ' + id)
-}
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type","applocation/json");
+
+  const requestOptions = {
+    method: 'DELETE',
+    headers: myHeaders,
+    redirect: 'follow'
+  };
+
+  fetch(`http://localhost:8800/api/v1/customers/${id}`, requestOptions)
+  .then(response => response.json())
+  .then(result => {
+    alert(result.message)
+    console.log(result)
+    if (result.status === 'ok') {
+      router.push('/')
+    }
+    fetchData()
+  })
+  .catch((error) => console.error('Error',error));
+};
 
 const onCreate = () => {
   router.push('/create')
